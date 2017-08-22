@@ -11,7 +11,8 @@ TEMPLATE = app
 
 SOURCES += main.cpp \
     CamUtils.cpp \
-    CamCalibration.cpp
+    CamCalibration.cpp \
+    CamDevice.cpp
 
 # The following define makes your compiler emit warnings if you use
 # any feature of Qt which as been marked deprecated (the exact warnings
@@ -26,8 +27,13 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 HEADERS += \
     CamUtils.h \
-    CamCalibration.h
+    CamCalibration.h \
+    CamDevice.h
+
+INCLUDEPATH += ./3rdparty/openni2/include
 
 LIBS += -L/usr/local/lib
 LIBS += -L/usr/local/apr/lib
+LIBS += -L../3rdparty/openni2
+LIBS += -lOpenNI2
 LIBS += -lopencv_core -lopencv_highgui -lopencv_imgproc -lopencv_contrib -lopencv_calib3d
