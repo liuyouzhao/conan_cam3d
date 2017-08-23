@@ -98,27 +98,22 @@ int CamDevice::startStream(int which)
                 rc = m_irStream.start();
                 if (rc != STATUS_OK)
                 {
-                    printf("Couldn't start the depth stream\n%s\n", OpenNI::getExtendedError());
+                    printf("Couldn't start the ir stream\n%s\n", OpenNI::getExtendedError());
                     return -1;
                 }
             }
             else
             {
-                printf("Couldn't create depth stream\n%s\n", OpenNI::getExtendedError());
+                printf("Couldn't create ir stream\n%s\n", OpenNI::getExtendedError());
                 return -1;
             }
         }
+
         if (m_device.getSensorInfo(SENSOR_COLOR) != NULL)
         {
             rc = m_colorStream.create(m_device, SENSOR_COLOR);
             if (rc == STATUS_OK)
             {
-                rc = m_colorStream.start();
-                if (rc != STATUS_OK)
-                {
-                    printf("Couldn't start the color stream\n%s\n", OpenNI::getExtendedError());
-                    return -1;
-                }
             }
             else
             {
@@ -193,14 +188,17 @@ int CamDevice::loopRead()
     }
     else if(m_mode == 1)
     {
+        m_irStream.start();
         m_irStream.readFrame(&frame1);
-        m_colorStream.readFrame(&frame2);
-
         if(onIrDataCallback)
-            onIrDataCallback((unsigned char*)(frame1.getData()), frame1.getWidth(), frame1.getHeight());
+            onIrDataCallback((unsigned short*)(frame1.getData()), frame1.getWidth(), frame1.getHeight());
+        m_irStream.stop();
 
+        rc = m_colorStream.start();
+        m_colorStream.readFrame(&frame2);
         if(onColorDataCallback)
             onColorDataCallback((unsigned char*)(frame2.getData()), frame2.getWidth(), frame2.getHeight());
+        m_colorStream.stop();
     }
     else
     {

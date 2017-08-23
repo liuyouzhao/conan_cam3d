@@ -24,7 +24,7 @@ public:
 
     void (*onDepthDataCallback) (unsigned short *data, int width, int height);
     void (*onColorDataCallback) (unsigned char *data, int width, int height);
-    void (*onIrDataCallback) (unsigned char *data, int width, int height);
+    void (*onIrDataCallback) (unsigned short *data, int width, int height);
 private:
 
     static int s_count;
